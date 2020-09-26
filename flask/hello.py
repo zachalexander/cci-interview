@@ -57,8 +57,6 @@ for index, row in df_filtered.iterrows():
 
 df_filtered.to_csv(r'C:/Users/zalexander/Desktop/answer3b.csv', index=False)
 
-
-
 # CSV File work
 ArrestCount(csv_file)
 AppearanceDateFilter(csv_file)
