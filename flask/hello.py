@@ -33,13 +33,6 @@ conn = psycopg2.connect(
 if ENV == 'dev':
     app.debug = True
     app.config['SQLALCHEMY_DATABASE_URI'] = LOCAL_DB_URL
-# else:
-#     app.debug = False
-#     app.config['SQLALCHEMY_DATABASE_URI'] = REMOTE_DB_URL
-
-app.config['SQL_ALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# app.config['SECRET_KEY'] = SECRET_KEY
 
 db = SQLAlchemy(app)
 
@@ -160,3 +153,6 @@ def getScript():
         sqlscript,
         mimetype="text",
         headers={"Content-disposition": "attachment; filename=sqlscript.txt"})
+
+if __name__ == '__main__':
+    app.run()
