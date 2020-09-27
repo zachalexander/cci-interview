@@ -1,0 +1,113 @@
+drop table if exists "Client";
+drop table if exists "Case";
+drop table if exists "Charge";
+drop table if exists "Judge";
+drop table if exists "Appearance";
+drop table if exists "AttendanceStatus";
+
+select * from "Client";
+select * from "Case";
+select * from "Charge";
+select * from "Judge";
+select * from "Appearance";
+select * from "AttendanceStatus";
+
+CREATE TABLE "Client" (
+  "ClientID" Serial primary key,
+  "StateID" Varchar,
+  "FirstName" Varchar,
+  "LastName" Varchar,
+  "DateOfBirth" Date
+);
+
+INSERT INTO "Client" ("StateID", "FirstName", "LastName", "DateOfBirth") 
+VALUES ('12345678A', 'John', 'Smith', '4/20/1986'), 
+		('12345678B', 'Kevin', 'Smith', '3/21/1980'), 
+		('12345678C', 'Kevin', 'Doe', '4/2/1983'), 
+		('34512789A', 'John', 'Doe', '7/12/1970'),
+		('34512789B', 'Adam', 'Nick', '5/12/1985');
+		
+CREATE TABLE "Case" (
+  "CaseID" Serial primary key,
+  "CaseNumber" Varchar,
+  "ClientID" Integer,
+  "ArrestDate" Date ,
+  "ChargeID" Integer,
+  "ArraignmentDate" Date
+);
+		
+INSERT INTO "Case" ("CaseNumber", "ClientID", "ArrestDate", "ChargeID", "ArraignmentDate") 
+VALUES ('2020AB123456', 1, '9/1/2020', 1, '9/2/2020'), 
+		('2020AB123457', 1, '9/5/2020', 2, '9/6/2020'),
+		('2020EF123456', 2, '9/3/2020', 3, '9/4/2020'),
+		('2020GH123456', 3, '9/4/2020', 1, '9/5/2020'),
+		('2020GH123457', 3, '9/4/2020', 4, '9/5/2020'),
+		('2020CD123456', 4, '9/2/2020', 4, '9/3/2020'),
+		('2020AB128901', 5, '9/6/2020', 3, '9/7/2020');
+
+CREATE TABLE "Charge" (
+  "ChargeID" Serial primary key,
+  "ChargeCode" Varchar
+);
+
+
+INSERT INTO "Charge" ("ChargeCode") 
+VALUES ('120.05 PL'), ('130.35 PL'), ('155.20 PL'), ('145.23 PL') 
+
+CREATE TABLE "Judge" (
+	"JudgeID" Serial primary key,
+	"JudgeName" Varchar
+)
+
+INSERT INTO "Judge" ("JudgeName") 
+VALUES ('Judge A'), ('Judge B'), ('Judge C'), ('Judge D') 
+
+
+CREATE TABLE "Appearance" (
+  "AppearanceID" Serial primary key,
+  "AppearanceDate" Date,
+  "JudgeID" Integer,
+  "AttendanceStatusID" Integer,
+  "CaseID" Integer,
+  "AppearanceAttendedDate" Date
+);
+
+INSERT INTO "Appearance" ("AppearanceDate", "JudgeID", "AttendanceStatusID", "CaseID", "AppearanceAttendedDate") 
+VALUES ('9/24/2020', 1,	1, 1, NULL),
+('9/28/2020', 1, 1, 2, NULL),
+('10/5/2020', 2, 1, 2, NULL),	
+('9/26/2020', 3, 1, 3, NULL),	
+('9/27/2020', 3, 1, 3, NULL),
+('9/15/2020', 4, 2, 4, '9/15/2020'),
+('9/15/2020', 4, 2, 5, '9/15/2020'),
+('9/21/2020', 2, 2, 6, NULL),	
+('10/1/2020', 2, 1, 6, NULL),	
+('9/29/2020', 1, 1, 7, NULL);
+
+CREATE TABLE "AttendanceStatus" (
+  "AttendanceStatusID" Serial primary key,
+  "AttendanceStatusType" Varchar
+);
+
+INSERT INTO "AttendanceStatus" ("AttendanceStatusType") 
+VALUES ('Scheduled'), ('Attended')
+
+select 
+cli."StateID",
+cli."FirstName",
+cli."LastName",
+cli."DateOfBirth",
+ca."CaseNumber",
+chrg."ChargeCode" as "ArrestCharge",
+ca."ArraignmentDate",
+ca."ArrestDate",
+app."AppearanceDate" as "CourtAppearanceDate",
+jdg."JudgeName" as "CourtAppearanceJudge",
+attst."AttendanceStatusType" as "CourtAppearanceStatus",
+app."AppearanceAttendedDate" as "CourtAppearanceAttendedDate"
+from "Case" ca
+inner join "Client" cli on cli."ClientID" = ca."ClientID"
+inner join "Charge" chrg on chrg."ChargeID" = ca."ChargeID"
+inner join "Appearance" app on app."CaseID" = ca."CaseID"
+inner join "Judge" jdg on jdg."JudgeID" = app."JudgeID"
+full join "AttendanceStatus" attst on attst."AttendanceStatusID" = app."AttendanceStatusID"
