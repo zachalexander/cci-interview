@@ -1,0 +1,30 @@
+body {
+    max-width: 1600px;
+    margin: auto;
+    text-align: center;
+}
+
+.fulldata {
+    width: 1400px;
+    margin: auto;
+}
+
+
+.table td, th {
+    text-align: center;   
+ }
+
+ h4, h5, p {
+     max-width: 700px;
+     margin: 2em auto;
+ }
+
+ .question3a, .question3b, .sqlscript, .highlight {
+     max-width: 700px;
+     margin: 2em auto;
+ }
+
+ a {
+     text-decoration: none;
+     color: #fff;
+ }
